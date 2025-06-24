@@ -1,0 +1,10 @@
+version: "2"
+authtoken: 2vME6ZsGByToU5YaGK6lDwCuprX_2RrURup5sUNrtAyUKyjAN
+
+tunnels:
+  frontend:
+    addr: 5173     # Or whatever your frontend port is
+    proto: http
+  backend:
+    addr: 3000
+    proto: http

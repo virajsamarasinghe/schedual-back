@@ -174,7 +174,7 @@ export const signin = async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password || email === "" || password === "") {
-    next(errorHandler(400, "All fields are required"));
+    return next(errorHandler(400, "All fields are required"));
   }
 
   try {
@@ -182,30 +182,31 @@ export const signin = async (req, res, next) => {
     if (!validUser) {
       return next(errorHandler(404, "User not found"));
     }
+
     const validPassword = bcryptjs.compareSync(password, validUser.password);
     if (!validPassword) {
       return next(errorHandler(400, "Invalid password"));
     }
+
     const token = jwt.sign(
       { id: validUser._id },
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' } // optional expiry
     );
 
+    // Exclude password from response
     const { password: pass, ...rest } = validUser._doc;
 
-    res
-      .status(200)
-      .cookie("Access_token", token, {
-        httpOnly: true,
-        secure:true,
-        sameSite: "none",
-        maxAge: 24 * 60 * 60 * 1000, 
-      })
-      .json(rest);
+    // Send token and user data in JSON response — NO cookies
+    res.status(200).json({
+      token,
+      user: rest,
+    });
   } catch (error) {
     next(error);
   }
 };
+
 
 //Get User details
 export const getUser = async (req, res, next) => {

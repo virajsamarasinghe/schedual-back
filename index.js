@@ -25,7 +25,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://scheduling-app-frontend-phi.vercel.app",
   "https://schedule.mathemly.com",
-  "https://schedual-front-nqt7-mgts6q59x.vercel.app"
+  "https://schedual-front-nqt7-8ckexb93o.vercel.app"
 ];
 
 app.use(
